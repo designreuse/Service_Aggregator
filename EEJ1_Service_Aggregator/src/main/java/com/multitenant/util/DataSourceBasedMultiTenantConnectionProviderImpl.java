@@ -1,46 +1,59 @@
 package com.multitenant.util;
 
-import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTenantConnectionProviderImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
+
+import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTenantConnectionProviderImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
+
+import com.multitenant.config.DataSourceCreater;
+import com.multitenant.config.MultitenancyProperties;
+
 @Component
-public class DataSourceBasedMultiTenantConnectionProviderImpl extends AbstractDataSourceBasedMultiTenantConnectionProviderImpl {
+public class DataSourceBasedMultiTenantConnectionProviderImpl
+  extends AbstractDataSourceBasedMultiTenantConnectionProviderImpl
+{
 
-	private static final long serialVersionUID = 8168907057647334460L;
-	private static final String DEFAULT_TENANT_ID = "tenant_1";
+  private static final long serialVersionUID = 8168907057647334460L;
+  private static final String DEFAULT_TENANT_ID = "Tenant1";
 
-	@Autowired
-	private DataSource dataSource1;
+  @Autowired
+  MultitenancyProperties multitenancyProperties;
 
-	@Autowired
-	private DataSource dataSource2;
+  private Map<String, DataSource> map;
 
-	@Autowired
-	private DataSource dataSource3;
+  @Autowired
+  ApplicationContext applicationContext;
 
-	private Map<String, DataSource> map;
+  @PostConstruct
+  public void load()
+  {
 
-	@PostConstruct
-	public void load() {
-		map = new HashMap<>();
-		map.put("tenant_1", dataSource1);
-		map.put("tenant_2", dataSource2);
-		map.put("tenant_3", dataSource3);
-	}
+    Map<String, DataSourceProperties> datasourceMap = multitenancyProperties.getDatasourceMap();
+    map = new HashMap<>();
+    for (String key : datasourceMap.keySet())
+    {
+      map.put(key, DataSourceCreater.getDataSourceFromDataSourceProperties(datasourceMap.get(key)));
+    }
 
-	@Override
-	protected DataSource selectAnyDataSource() {
-		return map.get(DEFAULT_TENANT_ID);
-	}
+    System.out.println("Datasources map: ============= " + map);
+  }
 
-	@Override
-	protected DataSource selectDataSource(String tenantIdentifier) {
-		return map.get(tenantIdentifier);
-	}
+  @Override
+  protected DataSource selectAnyDataSource()
+  {
+    return map.get(DEFAULT_TENANT_ID);
+  }
+
+  @Override
+  protected DataSource selectDataSource(String tenantIdentifier)
+  {
+    return map.get(tenantIdentifier);
+  }
 }

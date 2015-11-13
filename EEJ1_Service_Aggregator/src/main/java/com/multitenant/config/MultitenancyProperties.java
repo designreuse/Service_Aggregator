@@ -1,43 +1,102 @@
 package com.multitenant.config;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 @ConfigurationProperties("spring.multitenancy")
-public class MultitenancyProperties {
+public class MultitenancyProperties
+{
 
-	@NestedConfigurationProperty
-	private DataSourceProperties datasource1;
+  Map<String, DataSourceProperties> datasourceMap;
+  private List<String> urls;
+  private List<String> usernames;
+  private List<String> passwords;
+  @Value("spring.multitenancy.driver-class-name")
+  private String driverClassName;
 
-	@NestedConfigurationProperty
-	private DataSourceProperties datasource2;
+  @PostConstruct
+  public void setDatasourceMap()
+  {
+    datasourceMap = new HashMap<>();
+    for (int index = 0; index < urls.size(); index++)
+    {
+      String url = urls.get(index);
+      String username = usernames.get(index);
+      String password = passwords.get(index);
+      DataSourceProperties dataSourceProperties = new DataSourceProperties();
+      dataSourceProperties.setUrl(url);
+      dataSourceProperties.setUsername(username);
+      dataSourceProperties.setPassword(password);
+      dataSourceProperties.setDriverClassName(driverClassName);
+      String tenant = url.split("=")[1];
+      datasourceMap.put(tenant, dataSourceProperties);
+    }
+  }
+  
+  public List<String> getPassword()
+  {
+    return passwords;
+  }
 
-	@NestedConfigurationProperty
-	private DataSourceProperties datasource3;
+  public void setPassword(List<String> passwords)
+  {
+    this.passwords = passwords;
+  }
 
-	public DataSourceProperties getDatasource1() {
-		return datasource1;
-	}
+  /**
+   * @return the urls
+   */
+  public List<String> getUrls()
+  {
+    return urls;
+  }
 
-	public void setDatasource1(DataSourceProperties datasource1) {
-		this.datasource1 = datasource1;
-	}
+  /**
+   * @return the usernames
+   */
+  public List<String> getUsernames()
+  {
+    return usernames;
+  }
 
-	public DataSourceProperties getDatasource2() {
-		return datasource2;
-	}
+  /**
+   * @param urls the urls to set
+   */
+  public void setUrls(List<String> urls)
+  {
+    this.urls = urls;
+  }
 
-	public void setDatasource2(DataSourceProperties datasource2) {
-		this.datasource2 = datasource2;
-	}
+  /**
+   * @param usernames the usernames to set
+   */
+  public void setUsernames(List<String> usernames)
+  {
+    this.usernames = usernames;
+  }
 
-	public DataSourceProperties getDatasource3() {
-		return datasource3;
-	}
+  /**
+   * @return the datasourceMap
+   */
+  public Map<String, DataSourceProperties> getDatasourceMap()
+  {
+    return datasourceMap;
+  }
 
-	public void setDatasource3(DataSourceProperties datasource3) {
-		this.datasource3 = datasource3;
-	}
+  public String getDriverClassName()
+  {
+    return driverClassName;
+  }
 
+  public void setDriverClassName(String driverClassName)
+  {
+    this.driverClassName = driverClassName;
+  }
 }

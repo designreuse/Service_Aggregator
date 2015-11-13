@@ -7,10 +7,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import com.multitenant.web.MultiTenancyInterceptor;
 
 @Configuration
-public class WebMvcConfig extends WebMvcConfigurerAdapter {
+public class WebMvcConfig extends WebMvcConfigurerAdapter
+{
 
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new MultiTenancyInterceptor());
-	}
+  @Override
+  public void addInterceptors(InterceptorRegistry registry)
+  {
+    registry.addInterceptor(new MultiTenancyInterceptor());
+  }
 }

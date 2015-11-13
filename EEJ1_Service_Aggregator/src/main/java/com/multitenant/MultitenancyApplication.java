@@ -9,9 +9,11 @@ import com.multitenant.config.MultitenancyProperties;
 
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @EnableConfigurationProperties(MultitenancyProperties.class)
-public class MultitenancyApplication {
+public class MultitenancyApplication
+{
 
-    public static void main(String[] args) {
-        SpringApplication.run(MultitenancyApplication.class, args);
-    }
+  public static void main(String[] args)
+  {
+    SpringApplication.run(MultitenancyApplication.class, args);
+  }
 }
