@@ -16,44 +16,42 @@ import com.multitenant.config.DataSourceCreater;
 import com.multitenant.config.MultitenancyProperties;
 
 @Component
-public class DataSourceBasedMultiTenantConnectionProviderImpl
-  extends AbstractDataSourceBasedMultiTenantConnectionProviderImpl
-{
+public class DataSourceBasedMultiTenantConnectionProviderImpl extends
+		AbstractDataSourceBasedMultiTenantConnectionProviderImpl {
 
-  private static final long serialVersionUID = 8168907057647334460L;
-  private static final String DEFAULT_TENANT_ID = "Tenant1";
+	private static final long serialVersionUID = 8168907057647334460L;
+	private static final String DEFAULT_TENANT_ID = "Tenant1";
 
-  @Autowired
-  MultitenancyProperties multitenancyProperties;
+	@Autowired
+	MultitenancyProperties multitenancyProperties;
 
-  private Map<String, DataSource> map;
+	private Map<String, DataSource> map;
 
-  @Autowired
-  ApplicationContext applicationContext;
+	@Autowired
+	ApplicationContext applicationContext;
 
-  @PostConstruct
-  public void load()
-  {
+	@PostConstruct
+	public void load() {
 
-    Map<String, DataSourceProperties> datasourceMap = multitenancyProperties.getDatasourceMap();
-    map = new HashMap<>();
-    for (String key : datasourceMap.keySet())
-    {
-      map.put(key, DataSourceCreater.getDataSourceFromDataSourceProperties(datasourceMap.get(key)));
-    }
+		Map<String, DataSourceProperties> datasourceMap = multitenancyProperties
+				.getDatasourceMap();
+		map = new HashMap<>();
+		for (String key : datasourceMap.keySet()) {
+			map.put(key, DataSourceCreater
+					.getDataSourceFromDataSourceProperties(datasourceMap
+							.get(key)));
+		}
 
-    System.out.println("Datasources map: ============= " + map);
-  }
+		System.out.println("Datasources map: ============= " + map);
+	}
 
-  @Override
-  protected DataSource selectAnyDataSource()
-  {
-    return map.get(DEFAULT_TENANT_ID);
-  }
+	@Override
+	protected DataSource selectAnyDataSource() {
+		return map.get(DEFAULT_TENANT_ID);
+	}
 
-  @Override
-  protected DataSource selectDataSource(String tenantIdentifier)
-  {
-    return map.get(tenantIdentifier);
-  }
+	@Override
+	protected DataSource selectDataSource(String tenantIdentifier) {
+		return map.get(tenantIdentifier);
+	}
 }

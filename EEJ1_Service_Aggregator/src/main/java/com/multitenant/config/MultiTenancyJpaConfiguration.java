@@ -19,43 +19,33 @@ import com.multitenant.domain.Employee;
 
 @Configuration
 @EnableConfigurationProperties(JpaProperties.class)
-public class MultiTenancyJpaConfiguration
-{
+public class MultiTenancyJpaConfiguration {
 
-  /*
-   * @Autowired private DataSource dataSource;
-   */
-  @Autowired
-  private JpaProperties jpaProperties;
+	/*
+	 * @Autowired private DataSource dataSource;
+	 */
+	@Autowired
+	private JpaProperties jpaProperties;
 
-  @Autowired
-  private MultiTenantConnectionProvider multiTenantConnectionProvider;
+	@Autowired
+	private MultiTenantConnectionProvider multiTenantConnectionProvider;
 
-  @Autowired
-  MultitenancyProperties multitenancyProperties;
+	@Autowired
+	MultitenancyProperties multitenancyProperties;
 
-  @Autowired
-  private CurrentTenantIdentifierResolver currentTenantIdentifierResolver;
+	@Autowired
+	private CurrentTenantIdentifierResolver currentTenantIdentifierResolver;
 
-  @Bean
-  public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-    EntityManagerFactoryBuilder builder)
-  {
-    Map<String, Object> hibernateProps = new LinkedHashMap<>();
-    hibernateProps.putAll(jpaProperties.getHibernateProperties(DataSourceCreater
-      .getDataSourceFromDataSourceProperties(multitenancyProperties.getDatasourceMap().get(
-        "Tenant1"))));
+	@Bean
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder) {
+		Map<String, Object> hibernateProps = new LinkedHashMap<>();
+		hibernateProps.putAll(jpaProperties.getHibernateProperties(DataSourceCreater.getDataSourceFromDataSourceProperties(multitenancyProperties.getDatasourceMap().get("Tenant1"))));
 
-    hibernateProps.put(Environment.MULTI_TENANT, MultiTenancyStrategy.DATABASE);
-    hibernateProps.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProvider);
-    hibernateProps.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER,
-      currentTenantIdentifierResolver);
-    hibernateProps.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
+		hibernateProps.put(Environment.MULTI_TENANT, MultiTenancyStrategy.DATABASE);
+		hibernateProps.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProvider);
+		hibernateProps.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolver);
+		hibernateProps.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
 
-    return builder
-      .dataSource(
-        DataSourceCreater.getDataSourceFromDataSourceProperties(multitenancyProperties
-          .getDatasourceMap().get("Tenant1"))).packages(Employee.class.getPackage().getName())
-      .properties(hibernateProps).jta(false).build();
-  }
+		return builder.dataSource(DataSourceCreater.getDataSourceFromDataSourceProperties(multitenancyProperties.getDatasourceMap().get("Tenant1"))).packages(Employee.class.getPackage().getName()).properties(hibernateProps).jta(false).build();
+	}
 }
