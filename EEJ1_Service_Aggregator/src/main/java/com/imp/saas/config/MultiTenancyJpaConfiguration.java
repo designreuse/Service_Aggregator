@@ -1,4 +1,4 @@
-package com.multitenant.config;
+package com.imp.saas.config;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
-import com.multitenant.domain.Employee;
+import com.imp.saas.domain.Employee;
 
 @Configuration
 @EnableConfigurationProperties(JpaProperties.class)

@@ -1,4 +1,4 @@
-package com.multitenant.config;
+package com.imp.saas.config;
 
 import java.util.HashMap;
 import java.util.List;

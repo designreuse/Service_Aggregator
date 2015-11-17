@@ -1,10 +1,10 @@
-package com.multitenant.config;
+package com.imp.saas.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.multitenant.web.MultiTenancyInterceptor;
+import com.imp.saas.web.MultiTenancyInterceptor;
 
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {

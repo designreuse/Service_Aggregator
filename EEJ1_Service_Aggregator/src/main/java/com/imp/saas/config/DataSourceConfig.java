@@ -1,4 +1,4 @@
-package com.multitenant.config;
+package com.imp.saas.config;
 
 import javax.sql.DataSource;
 

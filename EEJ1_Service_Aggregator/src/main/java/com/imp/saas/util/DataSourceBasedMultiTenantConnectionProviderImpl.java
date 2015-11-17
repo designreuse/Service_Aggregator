@@ -1,4 +1,4 @@
-package com.multitenant.util;
+package com.imp.saas.util;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,8 +12,8 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import com.multitenant.config.DataSourceCreater;
-import com.multitenant.config.MultitenancyProperties;
+import com.imp.saas.config.DataSourceCreater;
+import com.imp.saas.config.MultitenancyProperties;
 
 @Component
 public class DataSourceBasedMultiTenantConnectionProviderImpl extends

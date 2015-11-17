@@ -1,4 +1,4 @@
-package com.multitenant.web;
+package com.imp.saas.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,4 +1,4 @@
-package com.multitenant.web;
+package com.imp.saas.web;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.multitenant.domain.Employee;
-import com.multitenant.repository.EmployeeRepository;
+import com.imp.saas.domain.Employee;
+import com.imp.saas.repository.EmployeeRepository;
 
 @Controller
 @RequestMapping("/{tenantid}")

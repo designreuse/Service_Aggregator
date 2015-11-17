@@ -1,4 +1,4 @@
-package com.multitenant.domain;
+package com.imp.saas.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

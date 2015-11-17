@@ -1,4 +1,4 @@
-package com.multitenant.web;
+package com.imp.saas.web;
 
 import java.util.Map;
 

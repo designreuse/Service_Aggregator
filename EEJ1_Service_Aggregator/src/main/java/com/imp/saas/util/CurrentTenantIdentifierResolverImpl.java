@@ -1,4 +1,4 @@
-package com.multitenant.util;
+package com.imp.saas.util;
 
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.springframework.stereotype.Component;

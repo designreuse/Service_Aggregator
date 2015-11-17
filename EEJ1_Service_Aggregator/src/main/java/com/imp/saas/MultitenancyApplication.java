@@ -1,11 +1,11 @@
-package com.multitenant;
+package com.imp.saas;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
-import com.multitenant.config.MultitenancyProperties;
+import com.imp.saas.config.MultitenancyProperties;
 
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @EnableConfigurationProperties(MultitenancyProperties.class)
