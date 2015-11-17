@@ -1,4 +1,4 @@
-package com.imp.saas.web;
+package com.imp.saas.ws;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
