@@ -20,7 +20,7 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends
 		AbstractDataSourceBasedMultiTenantConnectionProviderImpl {
 
 	private static final long serialVersionUID = 8168907057647334460L;
-	private static final String DEFAULT_TENANT_ID = "Tenant1";
+	private static final String DEFAULT_TENANT_ID = "ServicePlatform";
 
 	@Autowired
 	MultitenancyProperties multitenancyProperties;

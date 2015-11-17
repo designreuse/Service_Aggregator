@@ -18,8 +18,21 @@ public class MultitenancyProperties
   private List<String> urls;
   private List<String> usernames;
   private List<String> passwords;
+  
   @Value("spring.multitenancy.driver-class-name")
   private String driverClassName;
+
+  @Value("spring.multitenancy.masterDb")
+  private String masterDb;
+  
+  @Value("spring.multitenancy.masterDbURL")
+  private String masterDbURL;
+
+  @Value("spring.multitenancy.masterDbPassword")
+  private String masterDbPassword;
+
+  @Value("spring.multitenancy.masterDbUserName")
+  private String masterDbUserName;
 
   @PostConstruct
   public void setDatasourceMap()
@@ -38,8 +51,40 @@ public class MultitenancyProperties
       String tenant = url.split("=")[1];
       datasourceMap.put(tenant, dataSourceProperties);
     }
+    
+    //Setting master Db content in case No tenant is there.
+    DataSourceProperties masterDataSourceProperties = new DataSourceProperties();
+    masterDataSourceProperties.setUrl(masterDbURL);
+    masterDataSourceProperties.setUsername(masterDbUserName);
+    masterDataSourceProperties.setPassword(masterDbPassword);
+    masterDataSourceProperties.setDriverClassName(driverClassName);
+    datasourceMap.put(masterDb, masterDataSourceProperties);
+    
   }
   
+
+  public List<String> getPasswords()
+  {
+    return passwords;
+  }
+
+  public void setPasswords(List<String> passwords)
+  {
+    this.passwords = passwords;
+  }
+
+  public String getMasterDb()
+  {
+    return masterDb;
+  }
+
+  public void setMasterDb(String masterDb)
+  {
+    this.masterDb = masterDb;
+  }
+
+  
+
   public List<String> getPassword()
   {
     return passwords;
@@ -98,5 +143,59 @@ public class MultitenancyProperties
   public void setDriverClassName(String driverClassName)
   {
     this.driverClassName = driverClassName;
+  }
+
+
+  /**
+   * @return the masterDbURL
+   */
+  public String getMasterDbURL()
+  {
+    return masterDbURL;
+  }
+
+
+  /**
+   * @param masterDbURL the masterDbURL to set
+   */
+  public void setMasterDbURL(String masterDbURL)
+  {
+    this.masterDbURL = masterDbURL;
+  }
+
+
+  /**
+   * @return the masterDbPassword
+   */
+  public String getMasterDbPassword()
+  {
+    return masterDbPassword;
+  }
+
+
+  /**
+   * @param masterDbPassword the masterDbPassword to set
+   */
+  public void setMasterDbPassword(String masterDbPassword)
+  {
+    this.masterDbPassword = masterDbPassword;
+  }
+
+
+  /**
+   * @return the masterDbUserName
+   */
+  public String getMasterDbUserName()
+  {
+    return masterDbUserName;
+  }
+
+
+  /**
+   * @param masterDbUserName the masterDbUserName to set
+   */
+  public void setMasterDbUserName(String masterDbUserName)
+  {
+    this.masterDbUserName = masterDbUserName;
   }
 }

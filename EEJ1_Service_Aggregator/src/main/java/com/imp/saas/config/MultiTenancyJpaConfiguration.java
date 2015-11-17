@@ -8,8 +8,10 @@ import org.hibernate.cfg.Environment;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +21,7 @@ import com.imp.saas.domain.Employee;
 
 @Configuration
 @EnableConfigurationProperties(JpaProperties.class)
+@ConfigurationProperties("spring.multitenancy")
 public class MultiTenancyJpaConfiguration
 {
 
@@ -36,6 +39,14 @@ public class MultiTenancyJpaConfiguration
 
   @Autowired
   private CurrentTenantIdentifierResolver currentTenantIdentifierResolver;
+  
+  @Value("spring.multitenancy.dialect")
+  private String dialect;
+  
+
+  @Value("spring.multitenancy.masterDb")
+  private String masterDb;
+
 
   @Bean
   public LocalContainerEntityManagerFactoryBean entityManagerFactory(
@@ -43,19 +54,52 @@ public class MultiTenancyJpaConfiguration
   {
     Map<String, Object> hibernateProps = new LinkedHashMap<>();
     hibernateProps.putAll(jpaProperties.getHibernateProperties(DataSourceCreater
-      .getDataSourceFromDataSourceProperties(multitenancyProperties.getDatasourceMap().get(
-        "Tenant1"))));
+      .getDataSourceFromDataSourceProperties(multitenancyProperties.getDatasourceMap().get(masterDb))));
 
     hibernateProps.put(Environment.MULTI_TENANT, MultiTenancyStrategy.DATABASE);
     hibernateProps.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProvider);
     hibernateProps.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER,
       currentTenantIdentifierResolver);
-    hibernateProps.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
+    hibernateProps.put(Environment.DIALECT, dialect);
 
     return builder
       .dataSource(
         DataSourceCreater.getDataSourceFromDataSourceProperties(multitenancyProperties
-          .getDatasourceMap().get("Tenant1"))).packages(Employee.class.getPackage().getName())
+          .getDatasourceMap().get(masterDb))).packages(Employee.class.getPackage().getName())
       .properties(hibernateProps).jta(false).build();
   }
+
+  /**
+   * @return the masterDb
+   */
+  public String getMasterDb()
+  {
+    return masterDb;
+  }
+
+
+  /**
+   * @param masterDb the masterDb to set
+   */
+  public void setMasterDb(String masterDb)
+  {
+    this.masterDb = masterDb;
+  }
+
+  /**
+   * @return the dialect
+   */
+  public String getDialect()
+  {
+    return dialect;
+  }
+
+  /**
+   * @param dialect the dialect to set
+   */
+  public void setDialect(String dialect)
+  {
+    this.dialect = dialect;
+  }
+
 }
