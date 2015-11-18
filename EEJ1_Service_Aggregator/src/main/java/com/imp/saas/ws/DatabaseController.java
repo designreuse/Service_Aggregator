@@ -23,7 +23,7 @@ public class DatabaseController {
 		return "Gjhgashdas";
 	}
 
-	@RequestMapping(value = "/createDatabase", method=RequestMethod.POST)
+	@RequestMapping(value = "createDatabase", method=RequestMethod.POST)
 	@ResponseBody
 	public CreateDBResponse createDatabase(@RequestBody InputData inputData) {
 
