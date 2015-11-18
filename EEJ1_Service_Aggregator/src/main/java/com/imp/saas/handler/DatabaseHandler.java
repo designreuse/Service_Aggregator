@@ -9,14 +9,22 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.imp.saas.util.ScriptRunner;
 
 @Component
+@Configuration
+@PropertySource("classpath:application.properties")
 public class DatabaseHandler
 {
 
+  @Autowired
+  private Environment env;
   public String createDatabase(String dbName, String dbUserName, String dbPassword, String dbURL)
   {
 
@@ -25,11 +33,11 @@ public class DatabaseHandler
     int result = -1;
     try
     {
-      Class.forName("net.sourceforge.jtds.jdbc.Driver");
+      Class.forName(env.getProperty("database.driver"));
       connection = DriverManager.getConnection(dbURL, dbUserName, dbPassword);
       statement = connection.createStatement();
       // Create Database
-      result = statement.executeUpdate("CREATE DATABASE " + dbName);
+      result = statement.executeUpdate(env.getProperty("database.create.command") + " " + dbName);
       System.out.println("result of 'CREATE DATABASE '" + dbName + " is " + result);
       statement.close();
       connection.close();
@@ -37,8 +45,7 @@ public class DatabaseHandler
       connection = DriverManager.getConnection(dbURL, dbUserName, dbPassword);
 
       // Read SQL Script file
-      File file = new File(
-        "C:\\Users\\skgupta\\Desktop\\utility\\utility\\src\\ServicePlatform.sql");
+      File file = new File(env.getProperty("database.script.file.path"));
       // Initialize object for ScripRunner
       ScriptRunner sr = new ScriptRunner(connection, false, false);
       // Give the input file to Reader
