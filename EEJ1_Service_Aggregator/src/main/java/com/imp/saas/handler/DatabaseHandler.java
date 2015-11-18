@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -25,6 +26,9 @@ public class DatabaseHandler
 
   @Autowired
   private Environment env;
+  
+  private static final Logger logger = Logger.getLogger(DatabaseHandler.class);
+
   public String createDatabase(String dbName, String dbUserName, String dbPassword, String dbURL)
   {
 
@@ -34,11 +38,18 @@ public class DatabaseHandler
     try
     {
       Class.forName(env.getProperty("database.driver"));
+      
+      logger.debug("Database driver name : " + env.getProperty("database.driver"));
+      
       connection = DriverManager.getConnection(dbURL, dbUserName, dbPassword);
       statement = connection.createStatement();
       // Create Database
       result = statement.executeUpdate(env.getProperty("database.create.command") + " " + dbName);
-      System.out.println("result of 'CREATE DATABASE '" + dbName + " is " + result);
+      
+      logger.debug("Database Create Command Name : " + env.getProperty("database.create.command"));
+      
+      logger.debug("result of 'CREATE DATABASE '" + dbName + " is " + result);
+      
       statement.close();
       connection.close();
       dbURL = dbURL + "/" + dbName;
@@ -46,10 +57,15 @@ public class DatabaseHandler
 
       // Read SQL Script file
       File file = new File(env.getProperty("database.script.file.path"));
+      
+      logger.debug("Database script file path : " + env.getProperty("database.create.command"));
+      
       // Initialize object for ScripRunner
       ScriptRunner sr = new ScriptRunner(connection, false, false);
+      
       // Give the input file to Reader
       Reader reader = new BufferedReader(new FileReader(file));
+      
       // Exctute script
       sr.runScript(reader);
       connection.close();
