@@ -1,10 +1,10 @@
 package com.imp.saas.ws.bean;
 
-public class CreateDBResponse {
+public class DBResponse {
 
 	private String result;
 
-	public CreateDBResponse(String result) {
+	public DBResponse(String result) {
 		this.result = result;
 	}
 

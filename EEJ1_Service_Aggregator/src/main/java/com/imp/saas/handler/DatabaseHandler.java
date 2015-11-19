@@ -73,7 +73,7 @@ public class DatabaseHandler
     catch (Exception e)
     {
       e.printStackTrace();
-      return "error";
+      return e.getMessage();
     }
     finally
     {
@@ -87,7 +87,7 @@ public class DatabaseHandler
       }
     }
 
-    return "success";
+    return "Database created successfully";
   }
 
 }

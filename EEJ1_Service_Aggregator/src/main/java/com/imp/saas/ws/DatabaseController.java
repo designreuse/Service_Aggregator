@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.imp.saas.handler.DatabaseHandler;
-import com.imp.saas.ws.bean.CreateDBResponse;
+import com.imp.saas.ws.bean.DBResponse;
 import com.imp.saas.ws.bean.InputData;
 
 @Controller
@@ -25,12 +25,12 @@ public class DatabaseController {
 
 	@RequestMapping(value = "createDatabase", method=RequestMethod.POST)
 	@ResponseBody
-	public CreateDBResponse createDatabase(@RequestBody InputData inputData) {
+	public DBResponse createDatabase(@RequestBody InputData inputData) {
 
 		String result = databaseHandler.createDatabase(inputData.getDbName(),
 				inputData.getDbUserName(), inputData.getDbPassword(),
 				inputData.getDbURL());
-		return new CreateDBResponse(result);
+		return new DBResponse(result);
 
 	}
 }
