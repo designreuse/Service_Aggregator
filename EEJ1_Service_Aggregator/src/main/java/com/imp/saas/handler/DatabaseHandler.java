@@ -27,7 +27,7 @@ public class DatabaseHandler
   @Autowired
   private Environment env;
   
-  private static final Logger logger = Logger.getLogger(DatabaseHandler.class);
+  private static final Logger LOGGER = Logger.getLogger(DatabaseHandler.class);
 
   public String createDatabase(String dbName, String dbUserName, String dbPassword, String dbURL)
   {
@@ -39,16 +39,16 @@ public class DatabaseHandler
     {
       Class.forName(env.getProperty("database.driver"));
       
-      logger.debug("Database driver name : " + env.getProperty("database.driver"));
+      LOGGER.debug("Database driver name : " + env.getProperty("database.driver"));
       
       connection = DriverManager.getConnection(dbURL, dbUserName, dbPassword);
       statement = connection.createStatement();
       // Create Database
       result = statement.executeUpdate(env.getProperty("database.create.command") + " " + dbName);
       
-      logger.debug("Database Create Command Name : " + env.getProperty("database.create.command"));
+      LOGGER.debug("Database Create Command Name : " + env.getProperty("database.create.command"));
       
-      logger.debug("result of 'CREATE DATABASE '" + dbName + " is " + result);
+      LOGGER.debug("result of 'CREATE DATABASE '" + dbName + " is " + result);
       
       statement.close();
       connection.close();
@@ -58,7 +58,7 @@ public class DatabaseHandler
       // Read SQL Script file
       File file = new File(env.getProperty("database.script.file.path"));
       
-      logger.debug("Database script file path : " + env.getProperty("database.create.command"));
+      LOGGER.debug("Database script file path : " + env.getProperty("database.create.command"));
       
       // Initialize object for ScripRunner
       ScriptRunner sr = new ScriptRunner(connection, false, false);
@@ -72,8 +72,7 @@ public class DatabaseHandler
     }
     catch (Exception e)
     {
-      e.printStackTrace();
-      return e.getMessage();
+    	LOGGER.error("Error : ", e);
     }
     finally
     {
@@ -83,7 +82,7 @@ public class DatabaseHandler
       }
       catch (SQLException e)
       {
-        e.printStackTrace();
+    	  LOGGER.error("Error : ", e);
       }
     }
 

@@ -25,9 +25,6 @@ import com.imp.saas.domain.Employee;
 public class MultiTenancyJpaConfiguration
 {
 
-  /*
-   * @Autowired private DataSource dataSource;
-   */
   @Autowired
   private JpaProperties jpaProperties;
 

@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTenantConnectionProviderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,9 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends
 
 	@Autowired
 	MultitenancyProperties multitenancyProperties;
-
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(DataSourceBasedMultiTenantConnectionProviderImpl.class);
+	
 	private Map<String, DataSource> map;
 
 	@Autowired
@@ -42,7 +46,7 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends
 							.get(key)));
 		}
 
-		System.out.println("Datasources map: ============= " + map);
+		LOGGER.info("Datasources map: ============= " + map);
 	}
 
 	@Override

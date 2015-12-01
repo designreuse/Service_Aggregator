@@ -1,7 +1,5 @@
 package com.imp.saas.web;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +20,6 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeRepository employeeRepository;
 
-	@PersistenceContext
-	private EntityManager entityManager;
-
 	@RequestMapping
 	public String employees(@PathVariable String tenantid, Model model) {
 		model.addAttribute("tenantid", tenantid);
@@ -35,7 +30,7 @@ public class EmployeeController {
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@Transactional
-	public String addEmployee(@ModelAttribute Employee employee, Model model) {
+	public String addEmployee(@ModelAttribute Employee employee) {
 		employeeRepository.save(employee);
 		return "redirect:/{tenantid}";
 	}
