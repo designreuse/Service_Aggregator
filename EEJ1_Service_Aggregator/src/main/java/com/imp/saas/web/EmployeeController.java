@@ -13,6 +13,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.imp.saas.domain.Employee;
 import com.imp.saas.repository.EmployeeRepository;
 
+/**
+ * Controller for CRUD operations
+ * it maps tenantid from the URL to identify the correct tenant
+ * @author rakesh.singhania
+ *
+ */
 @Controller
 @RequestMapping("/{tenantid}")
 public class EmployeeController {

@@ -1,5 +1,10 @@
 package com.imp.saas.ws.bean;
 
+/**
+ * bean for database details
+ * @author rakesh.singhania
+ *
+ */
 public class InputData {
 
 	private String dbURL;

@@ -18,7 +18,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 import com.imp.saas.domain.Employee;
-
+/**
+ * 
+ * Class responsible for setting properties for connection 
+ * this call actually build datasource for the configuration provided
+ * @author rakesh.singhania
+ *
+ */
 @Configuration
 @EnableConfigurationProperties(JpaProperties.class)
 @ConfigurationProperties("spring.multitenancy")

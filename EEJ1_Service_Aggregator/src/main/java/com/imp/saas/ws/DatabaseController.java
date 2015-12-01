@@ -11,18 +11,23 @@ import com.imp.saas.handler.DatabaseHandler;
 import com.imp.saas.ws.bean.DBResponse;
 import com.imp.saas.ws.bean.InputData;
 
+/**
+ * Class responsible for creating Database at runtime
+ * @author rakesh.singhania
+ *
+ */
 @Controller
 @RequestMapping(value = "/webservice")
 public class DatabaseController {
 
 	@Autowired
 	DatabaseHandler databaseHandler;
-	
-	@RequestMapping("hello")
-	public String test(){
-		return "Gjhgashdas";
-	}
 
+	/**
+	 * Create database at runtime it takes DBname,username,pass as parameter in input data
+	 * @param inputData
+	 * @return
+	 */
 	@RequestMapping(value = "createDatabase", method=RequestMethod.POST)
 	@ResponseBody
 	public DBResponse createDatabase(@RequestBody InputData inputData) {

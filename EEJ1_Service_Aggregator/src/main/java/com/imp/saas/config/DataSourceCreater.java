@@ -5,6 +5,12 @@ import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 
+/**
+ * 
+ * Creates factory of connection by the provided datasource properties
+ * @author rakesh.singhania
+ *
+ */
 public class DataSourceCreater
 {
 

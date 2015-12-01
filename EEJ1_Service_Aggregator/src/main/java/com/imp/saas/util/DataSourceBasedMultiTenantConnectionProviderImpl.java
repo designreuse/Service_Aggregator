@@ -17,6 +17,12 @@ import org.springframework.stereotype.Component;
 import com.imp.saas.config.DataSourceCreater;
 import com.imp.saas.config.MultitenancyProperties;
 
+/**
+ * Creating DataSourceProperties for the DB connection of different different tenant 
+ * We are putting DataSourceProperties in a map with "tenantid" as identifier
+ * @author rakesh.singhania
+ *
+ */
 @Component
 public class DataSourceBasedMultiTenantConnectionProviderImpl extends
 		AbstractDataSourceBasedMultiTenantConnectionProviderImpl {
@@ -34,6 +40,12 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends
 	@Autowired
 	ApplicationContext applicationContext;
 
+	/**
+	 * setting Map<String, DataSource> map properties 
+	 * key is tenant Id in the Map
+	 * Once all properties are set everytime database details are loaded from this map
+	 *
+	 */
 	@PostConstruct
 	public void load() {
 
@@ -49,6 +61,9 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends
 		LOGGER.info("Datasources map: ============= " + map);
 	}
 
+	/**
+	 *  This helps in selecting data source on basis of tenant id.
+	 */
 	@Override
 	protected DataSource selectAnyDataSource() {
 		return map.get(DEFAULT_TENANT_ID);

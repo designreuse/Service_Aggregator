@@ -8,6 +8,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+/**
+ * This class intercept each request to set and get attribute "CURRENT_TENANT_IDENTIFIER"
+ *  from each request it get "tenantid" from the URL so that Respective tenantid can be used
+ * @author rakesh.singhania
+ *
+ */
 public class MultiTenancyInterceptor extends HandlerInterceptorAdapter {
 
 	@Override

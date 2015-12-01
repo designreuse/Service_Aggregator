@@ -9,6 +9,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Default Db setup for multi-tenant environment
+ * this is basically master DB for the application 
+ * 
+ * @author rakesh.singhania
+ *
+ */
 @Configuration
 @ConfigurationProperties("spring.multitenancy")
 public class DataSourceConfig

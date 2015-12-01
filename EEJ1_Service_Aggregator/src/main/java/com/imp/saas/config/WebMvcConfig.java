@@ -6,6 +6,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import com.imp.saas.web.MultiTenancyInterceptor;
 
+/**
+ * interceptor for each web request
+ * @author rakesh.singhania
+ *
+ */
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter
 {

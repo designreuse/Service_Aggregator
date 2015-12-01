@@ -18,6 +18,11 @@ import org.springframework.stereotype.Component;
 
 import com.imp.saas.util.ScriptRunner;
 
+/**
+ * Class responsible for creating database at runtime
+ * @author rakesh.singhania
+ *
+ */
 @Component
 @Configuration
 @PropertySource("classpath:application.properties")
