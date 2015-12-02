@@ -53,7 +53,7 @@ public class MultiTenancyJpaConfiguration
 
   @Bean
   public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-    EntityManagerFactoryBuilder builder)
+    EntityManagerFactoryBuilder builder) throws ConfigExceptions
   {
     Map<String, Object> hibernateProps = new LinkedHashMap<>();
     hibernateProps.putAll(jpaProperties.getHibernateProperties(DataSourceCreater

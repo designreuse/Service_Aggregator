@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.imp.saas.handler.DatabaseCustomException;
 import com.imp.saas.handler.DatabaseHandler;
 import com.imp.saas.ws.bean.DBResponse;
 import com.imp.saas.ws.bean.InputData;
@@ -24,13 +25,13 @@ public class DatabaseController {
 	DatabaseHandler databaseHandler;
 
 	/**
-	 * Create database at runtime it takes DBname,username,pass as parameter in input data
+	 * Create database at runtime it takes DBname,user name,pass as parameter in input data
 	 * @param inputData
 	 * @return
 	 */
 	@RequestMapping(value = "createDatabase", method=RequestMethod.POST)
 	@ResponseBody
-	public DBResponse createDatabase(@RequestBody InputData inputData) {
+	public DBResponse createDatabase(@RequestBody InputData inputData) throws DatabaseCustomException{
 
 		String result = databaseHandler.createDatabase(inputData.getDbName(),
 				inputData.getDbUserName(), inputData.getDbPassword(),

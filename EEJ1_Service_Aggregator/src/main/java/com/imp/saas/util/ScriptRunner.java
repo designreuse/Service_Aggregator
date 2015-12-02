@@ -65,7 +65,7 @@ public class ScriptRunner {
 	 * @param reader
 	 *            - the source of the script
 	 */
-	public void runScript(Reader reader) throws IOException, SQLException {
+	public void runScript(Reader reader) throws ScriptRunnerCustomException {
 		try {
 			boolean originalAutoCommit = connection.getAutoCommit();
 			try {
@@ -76,12 +76,9 @@ public class ScriptRunner {
 			} finally {
 				connection.setAutoCommit(originalAutoCommit);
 			}
-		} catch (IOException e) {
-			throw e;
-		} catch (SQLException e) {
-			throw e;
 		} catch (Exception e) {
-			throw new RuntimeException("Error running script.  Cause: " + e, e);
+			throw new ScriptRunnerCustomException(
+					"Unable to run script.Cause: " + e.getMessage());
 		}
 	}
 
@@ -98,8 +95,8 @@ public class ScriptRunner {
 	 * @throws IOException
 	 *             if there is an error reading from the Reader
 	 */
-	private void runScript(Connection conn, Reader reader) throws IOException,
-			SQLException {
+	private void runScript(Connection conn, Reader reader)
+			throws ScriptRunnerCustomException {
 		StringBuffer command = null;
 		try {
 			LineNumberReader lineReader = new LineNumberReader(reader);
@@ -179,18 +176,22 @@ public class ScriptRunner {
 				conn.commit();
 			}
 		} catch (SQLException e) {
-			e.fillInStackTrace();
-			printlnError("Error executing: " + command);
-			printlnError(e);
-			throw e;
+			throw new ScriptRunnerCustomException("Error executing: " + command
+					+ "Unable to run script.Cause: " + e.getMessage());
 		} catch (IOException e) {
-			e.fillInStackTrace();
-			printlnError("Error executing: " + command);
-			printlnError(e);
-			throw e;
+			throw new ScriptRunnerCustomException("Error executing: " + command
+					+ "Unable to run script.Cause: " + e.getMessage());
 		} finally {
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (SQLException e) {
+				printlnError(e);
+				throw new ScriptRunnerCustomException("Error executing: "
+						+ command + "Unable to run script.Cause: "
+						+ e.getMessage());
+			}
 			flush();
+
 		}
 	}
 

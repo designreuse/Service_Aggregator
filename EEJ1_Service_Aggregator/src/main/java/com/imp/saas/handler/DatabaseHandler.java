@@ -20,78 +20,82 @@ import com.imp.saas.util.ScriptRunner;
 
 /**
  * Class responsible for creating database at runtime
+ * 
  * @author rakesh.singhania
  *
  */
 @Component
 @Configuration
 @PropertySource("classpath:application.properties")
-public class DatabaseHandler
-{
+public class DatabaseHandler {
 
-  @Autowired
-  private Environment env;
-  
-  private static final Logger LOGGER = Logger.getLogger(DatabaseHandler.class);
+	@Autowired
+	private Environment env;
 
-  public String createDatabase(String dbName, String dbUserName, String dbPassword, String dbURL)
-  {
+	private static final Logger LOGGER = Logger
+			.getLogger(DatabaseHandler.class);
 
-    Connection connection = null;
-    Statement statement = null;
-    int result = -1;
-    try
-    {
-      Class.forName(env.getProperty("database.driver"));
-      
-      LOGGER.debug("Database driver name : " + env.getProperty("database.driver"));
-      
-      connection = DriverManager.getConnection(dbURL, dbUserName, dbPassword);
-      statement = connection.createStatement();
-      // Create Database
-      result = statement.executeUpdate(env.getProperty("database.create.command") + " " + dbName);
-      
-      LOGGER.debug("Database Create Command Name : " + env.getProperty("database.create.command"));
-      
-      LOGGER.debug("result of 'CREATE DATABASE '" + dbName + " is " + result);
-      
-      statement.close();
-      connection.close();
-      dbURL = dbURL + "/" + dbName;
-      connection = DriverManager.getConnection(dbURL, dbUserName, dbPassword);
+	public String createDatabase(String dbName, String dbUserName,
+			String dbPassword, String dbURL) throws DatabaseCustomException {
 
-      // Read SQL Script file
-      File file = new File(env.getProperty("database.script.file.path"));
-      
-      LOGGER.debug("Database script file path : " + env.getProperty("database.create.command"));
-      
-      // Initialize object for ScripRunner
-      ScriptRunner sr = new ScriptRunner(connection, false, false);
-      
-      // Give the input file to Reader
-      Reader reader = new BufferedReader(new FileReader(file));
-      
-      // Exctute script
-      sr.runScript(reader);
-      connection.close();
-    }
-    catch (Exception e)
-    {
-    	LOGGER.error("Error : ", e);
-    }
-    finally
-    {
-      try
-      {
-        if (connection != null) connection.close();
-      }
-      catch (SQLException e)
-      {
-    	  LOGGER.error("Error : ", e);
-      }
-    }
+		Connection connection = null;
+		Statement statement = null;
+		int result = -1;
+		try {
+			Class.forName(env.getProperty("database.driver"));
 
-    return "Database created successfully";
-  }
+			LOGGER.debug("Database driver name : "
+					+ env.getProperty("database.driver"));
+
+			connection = DriverManager.getConnection(dbURL, dbUserName,
+					dbPassword);
+			statement = connection.createStatement();
+			// Create Database
+			result = statement.executeUpdate(env
+					.getProperty("database.create.command") + " " + dbName);
+
+			LOGGER.debug("Database Create Command Name : "
+					+ env.getProperty("database.create.command"));
+
+			LOGGER.debug("result of 'CREATE DATABASE '" + dbName + " is "
+					+ result);
+
+			statement.close();
+			connection.close();
+			dbURL = dbURL + "/" + dbName;
+			connection = DriverManager.getConnection(dbURL, dbUserName,
+					dbPassword);
+
+			// Read SQL Script file
+			File file = new File(env.getProperty("database.script.file.path"));
+
+			LOGGER.debug("Database script file path : "
+					+ env.getProperty("database.create.command"));
+
+			// Initialize object for ScripRunner
+			ScriptRunner sr = new ScriptRunner(connection, false, false);
+
+			// Give the input file to Reader
+			Reader reader = new BufferedReader(new FileReader(file));
+
+			// Exctute script
+			sr.runScript(reader);
+			connection.close();
+		} catch (Exception e) {
+			throw new DatabaseCustomException(
+					"Unable to create database connection. " + e.getMessage());
+		} finally {
+			try {
+				if (connection != null)
+					connection.close();
+			} catch (SQLException e) {
+				throw new DatabaseCustomException(
+						"Unable to close database connection. "
+								+ e.getMessage());
+			}
+		}
+
+		return "Database created successfully";
+	}
 
 }
