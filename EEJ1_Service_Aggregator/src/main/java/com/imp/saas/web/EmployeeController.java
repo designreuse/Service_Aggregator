@@ -35,9 +35,7 @@ public class EmployeeController {
 		model.addAttribute("employees", employeeRepository.findAll());
 		}
 		catch(Exception e){
-		  throw new DatabaseCustomException(
-        "Unable to Process Request. "
-            + e.getMessage());
+		  return "redirect:/databaseException";
 		}
 		return "employees";
 	}

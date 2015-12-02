@@ -23,13 +23,11 @@ import com.imp.saas.exception.UnhandledException;
 
 /**
  * A controller whose request-handler methods deliberately throw exceptions
- * <p>
  * Contains its own <tt>@ExceptionHandler</tt> methods to handle (most of) the
  * exceptions it raises.
  * 
  */
 @Controller
-@RequestMapping("/")
 public class ExceptionHandlingController extends RuntimeException {
 
   /**
@@ -53,7 +51,7 @@ public class ExceptionHandlingController extends RuntimeException {
    */
   @RequestMapping("/databaseException")
   String throwDatabaseException() throws Exception {
-    logger.info("Throw InvalidCreditCardException");
+    logger.info("Throw Database Exception");
     throw new DatabaseCustomException("Database not found: info.db");
   }
 
@@ -109,8 +107,6 @@ public class ExceptionHandlingController extends RuntimeException {
    * 
    * @param req
    *            Current HTTP request.
-   * @param exception
-   *            The exception thrown - always {@link SupportInfoException}.
    * @return The model and view used by the DispatcherServlet to generate
    *         output.
    * @throws Exception
