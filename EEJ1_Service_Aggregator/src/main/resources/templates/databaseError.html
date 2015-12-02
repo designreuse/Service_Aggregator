@@ -1,0 +1,36 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head th:substituteby="header :: copy"></head>
+
+<body>
+	<h1>Database Error</h1>
+	<p>An internal data storage error has occurred accessing:</p>
+	<p>
+		<code th:text="${#httpServletRequest.requestURL}">Request URL</code>
+	</p>
+	<div
+		th:if="${ex} or ${exception} or (${message} and ${message.length() != 0})">
+		<b>Cause:</b> <span th:if="${ex}" th:text="${ex}">exception ...</span>
+		<span th:if="${exception}" th:text="${exception}">exception ...</span>
+		<span th:if="${message} and ${message.length() != 0}"
+			th:text="${message}">message ...</span>
+		<blockquote>
+			<i>Note: You would never generate a page that displays a Java
+				exception to an end-user in a real application</i>
+		</blockquote>
+	</div>
+
+	<p
+		th:unless="${ex} or ${exception} or (${message} and ${message.length() != 0})">
+		Cause unknown (no exception details available)</p>
+
+	<hr />
+
+	<h3>Notes on this Page</h3>
+	<p>Contact -- 8802200902</p>
+	<div th:substituteby="footer :: copy"></div>
+
+</body>
+</html>
