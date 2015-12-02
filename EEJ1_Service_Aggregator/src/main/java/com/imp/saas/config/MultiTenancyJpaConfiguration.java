@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 import com.imp.saas.domain.Employee;
+import com.imp.saas.exception.ConfigExceptions;
 /**
  * 
  * Class responsible for setting properties for connection 

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.imp.saas.domain.Employee;
+import com.imp.saas.exception.DatabaseCustomException;
 import com.imp.saas.repository.EmployeeRepository;
 
 /**
@@ -27,10 +28,17 @@ public class EmployeeController {
 	private EmployeeRepository employeeRepository;
 
 	@RequestMapping
-	public String employees(@PathVariable String tenantid, Model model) {
+	public String employees(@PathVariable String tenantid, Model model) throws DatabaseCustomException {
 		model.addAttribute("tenantid", tenantid);
 		model.addAttribute("employee", new Employee());
+		try{
 		model.addAttribute("employees", employeeRepository.findAll());
+		}
+		catch(Exception e){
+		  throw new DatabaseCustomException(
+        "Unable to Process Request. "
+            + e.getMessage());
+		}
 		return "employees";
 	}
 

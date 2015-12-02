@@ -5,9 +5,9 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTenantConnectionProviderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import com.imp.saas.config.DataSourceCreater;
 import com.imp.saas.config.MultitenancyProperties;
+import com.imp.saas.exception.ConfigExceptions;
 
 /**
  * Creating DataSourceProperties for the DB connection of different different tenant 
@@ -44,10 +45,11 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends
 	 * setting Map<String, DataSource> map properties 
 	 * key is tenant Id in the Map
 	 * Once all properties are set everytime database details are loaded from this map
+	 * @throws ConfigExceptions 
 	 *
 	 */
 	@PostConstruct
-	public void load() {
+	public void load() throws ConfigExceptions {
 
 		Map<String, DataSourceProperties> datasourceMap = multitenancyProperties
 				.getDatasourceMap();

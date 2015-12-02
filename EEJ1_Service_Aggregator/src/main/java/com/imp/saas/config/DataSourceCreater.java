@@ -5,6 +5,8 @@ import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 
+import com.imp.saas.exception.ConfigExceptions;
+
 /**
  * 
  * Creates factory of connection by the provided data source properties

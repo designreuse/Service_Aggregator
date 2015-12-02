@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.imp.saas.handler.DatabaseCustomException;
+import com.imp.saas.exception.DatabaseCustomException;
 import com.imp.saas.handler.DatabaseHandler;
 import com.imp.saas.ws.bean.DBResponse;
 import com.imp.saas.ws.bean.InputData;
