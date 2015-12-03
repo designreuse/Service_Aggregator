@@ -3,19 +3,27 @@ package com.imp.saas.handler;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Reader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
+import com.imp.saas.exception.ConfigExceptions;
 import com.imp.saas.exception.DatabaseCustomException;
 import com.imp.saas.util.ScriptRunner;
 
@@ -28,14 +36,30 @@ import com.imp.saas.util.ScriptRunner;
 @Component
 @Configuration
 @PropertySource("classpath:application.properties")
-public class DatabaseHandler {
+@ConfigurationProperties("spring.multitenancy")
+public class WSHandler {
 
 	@Autowired
 	private Environment env;
 
-	private static final Logger LOGGER = Logger
-			.getLogger(DatabaseHandler.class);
+	@Autowired
+	ApplicationContext appContext;
 
+	private List<String> urls;
+
+	private static final Logger LOGGER = Logger.getLogger(WSHandler.class);
+
+	/**
+	 * This method is used to create database for a Tenant when he register with
+	 * fecilitator
+	 * 
+	 * @param dbName
+	 * @param dbUserName
+	 * @param dbPassword
+	 * @param dbURL
+	 * @return
+	 * @throws DatabaseCustomException
+	 */
 	public String createDatabase(String dbName, String dbUserName,
 			String dbPassword, String dbURL) throws DatabaseCustomException {
 
@@ -99,4 +123,64 @@ public class DatabaseHandler {
 		return "Database created successfully";
 	}
 
+	/**
+	 * This method is used to create entry in property file when tenant would
+	 * register with fecilitator
+	 * 
+	 * @param dbName
+	 * @param dbUserName
+	 * @param dbPassword
+	 * @param dbHostName
+	 * @param dbPort
+	 */
+	public String createEntryforTenantInPropertyFile(String dbName,
+			String dbUserName, String dbPassword, String dbHostName,
+			String dbPort) throws ConfigExceptions {
+		try {
+
+			String urlKey = new StringBuffer()
+					.append("spring.multitenancy.urls[").append(urls.size())
+					.append("]").toString();
+			String urlValue = new StringBuffer()
+					.append("jdbc:jtds:sqlserver://").append(dbHostName)
+					.append(":").append(dbPort).append(";")
+					.append("databaseName=").append(dbName).toString();
+
+			String dbUserNameKey = new StringBuffer()
+					.append("spring.multitenancy.usernames[")
+					.append(urls.size()).append("]").toString();
+			String dbUserNameValue = new StringBuffer(dbUserName).toString();
+
+			String dbPasswordKey = new StringBuffer()
+					.append("spring.multitenancy.password[")
+					.append(urls.size()).append("]").toString();
+			String dbPasswordValue = new StringBuffer(dbPassword).toString();
+
+			Resource resource = appContext
+					.getResource("classpath:application.properties");
+
+			Properties prop = new Properties();
+			prop.setProperty(urlKey, urlValue);
+			prop.setProperty(dbUserNameKey, dbUserNameValue);
+			prop.setProperty(dbPasswordKey, dbPasswordValue);
+
+			prop.store(new FileWriter(resource.getFile().getName(), true),
+					"DB Config file");
+			System.out.println(resource.getFile().getName()
+					+ " written successfully");
+
+			LOGGER.info("Entry for tenant written in property file");
+			return "Entry created successfully";
+		} catch (IOException e) {
+			throw new ConfigExceptions(e.getMessage());
+		}
+	}
+
+	public List<String> getUrls() {
+		return urls;
+	}
+
+	public void setUrls(List<String> urls) {
+		this.urls = urls;
+	}
 }

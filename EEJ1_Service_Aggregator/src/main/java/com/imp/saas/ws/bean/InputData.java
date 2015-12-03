@@ -2,6 +2,7 @@ package com.imp.saas.ws.bean;
 
 /**
  * bean for database details
+ * 
  * @author rakesh.singhania
  *
  */
@@ -11,6 +12,24 @@ public class InputData {
 	private String dbName;
 	private String dbUserName;
 	private String dbPassword;
+	private String dbHostName;
+	private String dbPort;
+
+	public String getDbHostName() {
+		return dbHostName;
+	}
+
+	public void setDbHostName(String dbHostName) {
+		this.dbHostName = dbHostName;
+	}
+
+	public String getDbPort() {
+		return dbPort;
+	}
+
+	public void setDbPort(String dbPort) {
+		this.dbPort = dbPort;
+	}
 
 	public String getDbURL() {
 		return dbURL;
