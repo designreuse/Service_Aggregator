@@ -6,9 +6,18 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.core.env.Environment;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestTemplate;
+
+import com.imp.saas.exception.ConfigExceptions;
+import com.imp.saas.ws.bean.DBResponse;
+
 
 /**
  * Set properties of DB in Map so that they can be configured.
@@ -40,12 +49,15 @@ public class MultitenancyProperties
 
   @Value("spring.multitenancy.masterDbUserName")
   private String masterDbUserName;
-
+  
+  @Autowired
+  Environment env;
+  
   @PostConstruct
-  public void setDatasourceMap()
+  public void setDatasourceMap() throws ConfigExceptions
   {
     datasourceMap = new HashMap<>();
-    for (int index = 0; index < urls.size(); index++)
+    /*for (int index = 0; index < urls.size(); index++)
     {
       String url = urls.get(index);
       String username = usernames.get(index);
@@ -57,7 +69,19 @@ public class MultitenancyProperties
       dataSourceProperties.setDriverClassName(driverClassName);
       String tenant = url.split("=")[1];
       datasourceMap.put(tenant, dataSourceProperties);
-    }
+    }*/
+    DBResponse[] tenantMetadatList = getTenantDatabaseMetadatDetails();
+    for (DBResponse dbResponse : tenantMetadatList) {
+    	DataSourceProperties dataSourceProperties = new DataSourceProperties();
+    	
+    	dataSourceProperties.setUrl("jdbc:jtds:sqlserver://"+dbResponse.getHostName()+":"+dbResponse.getPortNumber()+";databaseName="+dbResponse.getDbName());
+        dataSourceProperties.setUsername(dbResponse.getDbUserName());
+        dataSourceProperties.setPassword(dbResponse.getDbPassword());
+        dataSourceProperties.setDriverClassName(driverClassName);
+        datasourceMap.put(dbResponse.getDbName(), dataSourceProperties);
+	}
+    
+    System.out.println(tenantMetadatList);
     
     //Setting master Db content in case No tenant is there.
     DataSourceProperties masterDataSourceProperties = new DataSourceProperties();
@@ -69,6 +93,27 @@ public class MultitenancyProperties
     
   }
   
+  /**
+   * @param dbProfileData
+   * @return
+   */
+  public DBResponse[] getTenantDatabaseMetadatDetails() throws ConfigExceptions
+  {
+    RestTemplate rt = new RestTemplate();
+    rt.getMessageConverters().add(new StringHttpMessageConverter());
+    String uri = new String(env.getProperty("tenant.database.metadata.uri"));
+    DBResponse[] response = null;
+    try
+    {
+      response = (DBResponse[])rt.postForObject(uri,null, DBResponse[].class);
+    }
+    catch(ResourceAccessException e)
+    {
+      throw new ConfigExceptions(e.getMessage());
+    }
+    return response;
+
+  }
 
   public List<String> getPasswords()
   {
