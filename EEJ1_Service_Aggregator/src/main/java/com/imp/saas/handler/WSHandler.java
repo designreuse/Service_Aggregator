@@ -137,59 +137,6 @@ public class WSHandler {
 	}
 
 	/**
-	 * This method is used to create entry in property file when tenant would
-	 * register with fecilitator
-	 * 
-	 * @param dbName
-	 * @param dbUserName
-	 * @param dbPassword
-	 * @param dbHostName
-	 * @param dbPort
-	 */
-	public String createEntryforTenantInPropertyFile(String dbName,
-			String dbUserName, String dbPassword, String dbHostName,
-			String dbPort) throws ConfigExceptions {
-		try {
-
-			String urlKey = new StringBuffer()
-					.append("spring.multitenancy.urls[").append(urls.size())
-					.append("]").toString();
-			String urlValue = new StringBuffer()
-					.append("jdbc:jtds:sqlserver://").append(dbHostName)
-					.append(":").append(dbPort).append(";")
-					.append("databaseName=").append(dbName).toString();
-
-			String dbUserNameKey = new StringBuffer()
-					.append("spring.multitenancy.usernames[")
-					.append(urls.size()).append("]").toString();
-			String dbUserNameValue = new StringBuffer(dbUserName).toString();
-
-			String dbPasswordKey = new StringBuffer()
-					.append("spring.multitenancy.password[")
-					.append(urls.size()).append("]").toString();
-			String dbPasswordValue = new StringBuffer(dbPassword).toString();
-
-			Resource resource = appContext
-					.getResource("classpath:application.properties");
-
-			Properties prop = new Properties();
-			prop.setProperty(urlKey, urlValue);
-			prop.setProperty(dbUserNameKey, dbUserNameValue);
-			prop.setProperty(dbPasswordKey, dbPasswordValue);
-
-			prop.store(new FileWriter(resource.getFile().getName(), true),
-					"DB Config file");
-			System.out.println(resource.getFile().getName()
-					+ " written successfully");
-
-			LOGGER.info("Entry for tenant written in property file");
-			return "Entry created successfully";
-		} catch (IOException e) {
-			throw new ConfigExceptions(e.getMessage());
-		}
-	}
-
-	/**
 	 * 
 	 * @return
 	 * @throws ConfigExceptions

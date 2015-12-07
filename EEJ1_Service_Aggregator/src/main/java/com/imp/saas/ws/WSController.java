@@ -52,27 +52,6 @@ public class WSController {
 	}
 
 	/**
-	 * Create database at runtime it takes DBname,user name,pass as parameter in
-	 * input data
-	 * 
-	 * @param inputData
-	 * @return
-	 * @throws ConfigExceptions
-	 */
-	@RequestMapping(value = "createTenantEntryinPropertyFile", method = RequestMethod.POST)
-	@ResponseBody
-	public DBResponse createEntryforTenantInPropertyFile(
-			@RequestBody InputData inputData) throws ConfigExceptions {
-
-		String result = wsHandler.createEntryforTenantInPropertyFile(
-				inputData.getDbName(), inputData.getDbUserName(),
-				inputData.getDbPassword(), inputData.getDbHostName(),
-				inputData.getDbPort());
-		return new DBResponse(result);
-
-	}
-
-	/**
 	 * This api dedicated for modifying data-source map with registered tenant
 	 * at runtime
 	 * 
