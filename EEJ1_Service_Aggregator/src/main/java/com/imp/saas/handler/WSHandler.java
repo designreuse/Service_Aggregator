@@ -11,10 +11,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +26,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
+import com.imp.saas.config.MultitenancyProperties;
 import com.imp.saas.exception.ConfigExceptions;
 import com.imp.saas.exception.DatabaseCustomException;
 import com.imp.saas.util.ScriptRunner;
@@ -46,6 +50,15 @@ public class WSHandler {
 	ApplicationContext appContext;
 
 	private List<String> urls;
+
+	@Value("spring.multitenancy.driver-class-name")
+	private String driverClassName;
+
+	@Value("process.db.sqlserver.driver.url")
+	private String sqlServerDriverName;
+
+	@Autowired
+	MultitenancyProperties multitenancyProperties;
 
 	private static final Logger LOGGER = Logger.getLogger(WSHandler.class);
 
@@ -176,11 +189,65 @@ public class WSHandler {
 		}
 	}
 
-	public List<String> getUrls() {
-		return urls;
+	/**
+	 * 
+	 * @return
+	 * @throws ConfigExceptions
+	 */
+	public Map<String, DataSourceProperties> updateDatasourceMap()
+			throws ConfigExceptions {
+
+		multitenancyProperties.setDatasourceMap();
+		return multitenancyProperties.getDatasourceMap();
 	}
 
-	public void setUrls(List<String> urls) {
-		this.urls = urls;
+	public String getDriverClassName() {
+		return driverClassName;
 	}
+
+	public void setDriverClassName(String driverClassName) {
+		this.driverClassName = driverClassName;
+	}
+
+	/**
+	 * @return the sqlServerDriverName
+	 */
+	public String getSqlServerDriverName() {
+		return sqlServerDriverName;
+	}
+
+	/**
+	 * @param sqlServerDriverName
+	 *            the sqlServerDriverName to set
+	 */
+	public void setSqlServerDriverName(String sqlServerDriverName) {
+		this.sqlServerDriverName = sqlServerDriverName;
+	}
+
+	/**
+	 * 
+	 * @param dbName
+	 * @param dbUserName
+	 * @param dbPassword
+	 * @param dbHostName
+	 * @param dbPort
+	 * @return
+	 */
+	/*
+	 * public Map<String, DataSourceProperties> updateDatasourceMap(String
+	 * dbName, String dbUserName, String dbPassword, String dbHostName, String
+	 * dbPort) {
+	 * 
+	 * Map<String, DataSourceProperties> datasourceMap = multitenancyProperties
+	 * .getDatasourceMap(); DataSourceProperties dataSourceProperties = new
+	 * DataSourceProperties(); dataSourceProperties.setUrl(sqlServerDriverName +
+	 * dbHostName + ":" + dbPort + ";databaseName=" + dbName);
+	 * dataSourceProperties.setUsername(dbUserName);
+	 * dataSourceProperties.setPassword(dbPassword);
+	 * dataSourceProperties.setDriverClassName(driverClassName);
+	 * 
+	 * datasourceMap.put(dbName, dataSourceProperties);
+	 * multitenancyProperties.setDatasourceMap(datasourceMap); return
+	 * datasourceMap; }
+	 */
 }

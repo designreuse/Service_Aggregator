@@ -1,6 +1,10 @@
 package com.imp.saas.ws;
 
+import java.util.Map;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +29,8 @@ public class WSController {
 
 	@Autowired
 	WSHandler wsHandler;
+
+	private static final Logger LOGGER = Logger.getLogger(WSController.class);
 
 	/**
 	 * Create database at runtime it takes DBname,user name,pass as parameter in
@@ -65,4 +71,26 @@ public class WSController {
 		return new DBResponse(result);
 
 	}
+
+	/**
+	 * This api dedicated for modifying data-source map with registered tenant
+	 * at runtime
+	 * 
+	 * @param inputData
+	 * @return
+	 * @throws ConfigExceptions
+	 */
+	@RequestMapping(value = "updateDatasourceMap", method = RequestMethod.POST)
+	@ResponseBody
+	public DBResponse updateDatasourceMap(@RequestBody InputData inputData)
+			throws ConfigExceptions {
+
+		Map<String, DataSourceProperties> dataSourceMap = wsHandler.updateDatasourceMap();
+
+		LOGGER.info("datasource map for :" + inputData.getDbName() + " is :"
+				+ dataSourceMap.get(inputData.getDbName()));
+		return new DBResponse("data source map successfully updated");
+
+	}
+
 }
