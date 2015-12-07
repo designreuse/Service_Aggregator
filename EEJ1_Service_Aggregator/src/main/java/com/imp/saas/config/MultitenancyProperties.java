@@ -57,18 +57,7 @@ public class MultitenancyProperties {
 	@PostConstruct
 	public void setDatasourceMap() throws ConfigExceptions {
 		datasourceMap = new HashMap<>();
-		/*
-		 * for (int index = 0; index < urls.size(); index++) { String url =
-		 * urls.get(index); String username = usernames.get(index); String
-		 * password = passwords.get(index); DataSourceProperties
-		 * dataSourceProperties = new DataSourceProperties();
-		 * dataSourceProperties.setUrl(url);
-		 * dataSourceProperties.setUsername(username);
-		 * dataSourceProperties.setPassword(password);
-		 * dataSourceProperties.setDriverClassName(driverClassName); String
-		 * tenant = url.split("=")[1]; datasourceMap.put(tenant,
-		 * dataSourceProperties); }
-		 */
+
 		DBResponse[] tenantMetadatList = getTenantDatabaseMetadatDetails();
 		for (DBResponse dbResponse : tenantMetadatList) {
 			DataSourceProperties dataSourceProperties = new DataSourceProperties();

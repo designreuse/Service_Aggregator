@@ -8,9 +8,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import com.imp.saas.web.ExceptionHandlingController;
 
 /**
  * Default Db setup for multi-tenant environment
