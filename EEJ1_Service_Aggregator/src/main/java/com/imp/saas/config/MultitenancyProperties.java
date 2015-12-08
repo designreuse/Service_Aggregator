@@ -48,7 +48,7 @@ public class MultitenancyProperties {
 	@Value("spring.multitenancy.masterDbUserName")
 	private String masterDbUserName;
 
-	@Value("process.db.sqlserver.driver.url")
+	@Value("spring.multitenancy.sqlServerDriverName")
 	private String sqlServerDriverName;
 
 	@Autowired
