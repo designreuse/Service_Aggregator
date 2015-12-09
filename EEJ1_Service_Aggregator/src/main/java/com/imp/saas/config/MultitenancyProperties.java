@@ -69,7 +69,7 @@ public class MultitenancyProperties {
 			dataSourceProperties.setUsername(dbResponse.getDbUserName());
 			dataSourceProperties.setPassword(dbResponse.getDbPassword());
 			dataSourceProperties.setDriverClassName(driverClassName);
-			datasourceMap.put(dbResponse.getDbName(), dataSourceProperties);
+			datasourceMap.put(dbResponse.getTenantId(), dataSourceProperties);
 		}
 
 		System.out.println(tenantMetadatList);
