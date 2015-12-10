@@ -4,7 +4,8 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <property name="context-root" value="EEJ1_Service_Aggregator"/>
-        <property name="java-output-path" value="/EEJ1_Service_Aggregator/target/classes"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/.apt_generated"/>
+        <property name="java-output-path" value="/multitenancy/target/classes"/>
+        <property name="context-root" value="multitenant"/>
     </wb-module>
 </project-modules>
