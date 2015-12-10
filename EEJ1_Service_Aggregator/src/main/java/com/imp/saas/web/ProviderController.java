@@ -43,13 +43,14 @@ public class ProviderController {
 	@Autowired
 	private RegionRepository regionRepository;
 
-	//@Autowired
-	//private Address address;
+	// @Autowired
+	// private Address address;
 
-	//@Autowired
-	//private Region region;
-	
-	private static final Logger LOGGER = Logger.getLogger(ProviderController.class);
+	// @Autowired
+	// private Region region;
+
+	private static final Logger LOGGER = Logger
+			.getLogger(ProviderController.class);
 
 	@RequestMapping(value = "/addProvider", method = { RequestMethod.GET,
 			RequestMethod.POST })
@@ -73,7 +74,7 @@ public class ProviderController {
 
 			address = addressRepository.save(address);
 
-			Long regionId=new Long(1);
+			Long regionId = new Long(1);
 			Iterable<Region> regionList = regionRepository.findAll();
 			for (Iterator iterator = regionList.iterator(); iterator.hasNext();) {
 				Region region = (Region) iterator.next();
@@ -84,21 +85,23 @@ public class ProviderController {
 					break;
 				}
 			}
-			
+
 			Provider provider = new Provider();
 			provider.setAddressId(address.getAddressId());
 			provider.setEmail(jsonObject.getString("email"));
 			provider.setName(jsonObject.getString("name"));
 			provider.setPhone(jsonObject.getString("phone"));
 			provider.setRegionId(regionId);
-			
+
 			provider = providerRepository.save(provider);
-			
-			LOGGER.info("provider Id :"+provider.getProviderId());
-			
+
+			LOGGER.info("provider Id :" + provider.getProviderId());
+
 		} catch (Exception e) {
-			return "Provider not inserted in database";
+			LOGGER.error("Provider not inserted in database :" + e.getMessage());
 		}
+		LOGGER.debug("Provider successfully added in the database");
+
 		return "Provider successfully added in the database";
 	}
 }
