@@ -50,10 +50,10 @@ CREATE TABLE [ADDRESS]
 	[ADDRESS_ID] bigint NOT NULL,
 	[LINE1] varchar(50),
 	[LINE2] varchar(50),
-	[CITY] nvarchar(50),
-	[STATE] nvarchar(50),
-	[COUNTRY] nvarchar(50),
-	[ZIP_CODE] nvarchar(50),
+	[CITY] nvarchar(50) NOT NULL,
+	[STATE] nvarchar(50)NOT NULL,
+	[COUNTRY] nvarchar(50) NOT NULL,
+	[ZIP_CODE] nvarchar(50) NOT NULL,
 	PRIMARY KEY ([ADDRESS_ID])
 );
 
@@ -71,8 +71,6 @@ CREATE TABLE [CUSTOMER]
 CREATE TABLE [FIELD_PROFESSIONAL]
 (
 	[FIELD_PROFESSIONAL_ID] bigint NOT NULL,
-	[PROVIDER_ID] bigint NOT NULL,
-	[AGGREGATOR_ID] bigint NOT NULL,
 	[USER_ID] bigint NOT NULL,
 	[ADDRESS_ID] bigint NOT NULL,
 	PRIMARY KEY ([FIELD_PROFESSIONAL_ID])
@@ -156,7 +154,6 @@ CREATE TABLE [PROVIDER]
 	[PHONE] numeric(15),
 	[EMAIL] nvarchar(max) NOT NULL,
 	[REGION_ID] bigint NOT NULL,
-	[AGGREGATOR_ID] bigint NOT NULL,
 	[ADDRESS_ID] bigint NOT NULL,
 	PRIMARY KEY ([PROVIDER_ID])
 );
