@@ -61,13 +61,13 @@ public class WSController {
 	 */
 	@RequestMapping(value = "updateDatasourceMap", method = RequestMethod.POST)
 	@ResponseBody
-	public DBResponse updateDatasourceMap(@RequestBody InputData inputData)
+	public DBResponse updateDatasourceMap(@RequestBody String tenanatId)
 			throws ConfigExceptions {
 
 		Map<String, DataSourceProperties> dataSourceMap = wsHandler.updateDatasourceMap();
 
-		LOGGER.info("datasource map for :" + inputData.getDbName() + " is :"
-				+ dataSourceMap.get(inputData.getDbName()));
+		LOGGER.info("datasource map for :" + tenanatId + " is :"
+				+ dataSourceMap.get(tenanatId));
 		return new DBResponse("data source map successfully updated");
 
 	}
