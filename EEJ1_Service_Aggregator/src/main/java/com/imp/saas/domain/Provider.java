@@ -1,175 +1,142 @@
 package com.imp.saas.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 @Entity
+@Table(name = "PROVIDER")
+@GenericGenerator(name = "Provider", strategy = "org.hibernate.id.enhanced.TableGenerator", parameters = {
+		@Parameter(name = "segment_value", value = "PROVIDER"),
+		@Parameter(name = "increment_size", value = "10"),
+		@Parameter(name = "optimizer", value = "pooled") })
 public class Provider {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long provider_id;
+	@GeneratedValue(generator = "Provider", strategy = GenerationType.IDENTITY)
+	@Column(name = "PROVIDER_ID")
+	private Long providerId;
+
+	@Column(name = "NAME")
 	private String name;
+	
+	@Column(name = "PHONE")
 	private String phone;
+	
+	@Column(name = "EMAIL")
 	private String email;
-	private String region_id;
-	private String aggregator_id;
-	 private String address_id;
 	
-	public Provider(
-    String name,
-    String phone,
-    String email,
-    String region_id,
-    String aggregator_id,
-    String address_id)
-  {
-    super();
-    this.name = name;
-    this.phone = phone;
-    this.email = email;
-    this.region_id = region_id;
-    this.aggregator_id = aggregator_id;
-    this.address_id = address_id;
-  }
-
-  @Override
-  public String toString()
-  {
-    return "Provider [provider_id=" + provider_id + ", name=" + name + ", phone=" + phone
-      + ", email=" + email + ", region_id=" + region_id + ", aggregator_id=" + aggregator_id
-      + ", address_id=" + address_id + "]";
-  }
-
-
-
-  /**
-   * @return the provider_id
-   */
-  public Long getProvider_id()
-  {
-    return provider_id;
-  }
-
-
-  /**
-   * @param provider_id the provider_id to set
-   */
-  public void setProvider_id(Long provider_id)
-  {
-    this.provider_id = provider_id;
-  }
-
-
-  /**
-   * @return the name
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-
-  /**
-   * @param name the name to set
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-
-  /**
-   * @return the phone
-   */
-  public String getPhone()
-  {
-    return phone;
-  }
-
-
-  /**
-   * @param phone the phone to set
-   */
-  public void setPhone(String phone)
-  {
-    this.phone = phone;
-  }
-
-
-  /**
-   * @return the email
-   */
-  public String getEmail()
-  {
-    return email;
-  }
-
-
-  /**
-   * @param email the email to set
-   */
-  public void setEmail(String email)
-  {
-    this.email = email;
-  }
-
-
-  /**
-   * @return the region_id
-   */
-  public String getRegion_id()
-  {
-    return region_id;
-  }
-
-
-  /**
-   * @param region_id the region_id to set
-   */
-  public void setRegion_id(String region_id)
-  {
-    this.region_id = region_id;
-  }
-
-
-  /**
-   * @return the aggregator_id
-   */
-  public String getAggregator_id()
-  {
-    return aggregator_id;
-  }
-
-
-  /**
-   * @param aggregator_id the aggregator_id to set
-   */
-  public void setAggregator_id(String aggregator_id)
-  {
-    this.aggregator_id = aggregator_id;
-  }
-
-
-  /**
-   * @return the address_id
-   */
-  public String getAddress_id()
-  {
-    return address_id;
-  }
-
-
-  /**
-   * @param address_id the address_id to set
-   */
-  public void setAddress_id(String address_id)
-  {
-    this.address_id = address_id;
-  }
+	@Column(name = "REGION_ID")
+	private Long regionId;
 	
-	
+	@Column(name = "ADDRESS_ID")
+	private Long addressId;
+
+	/**
+	 * @return the providerId
+	 */
+	public Long getProviderId() {
+		return providerId;
+	}
+
+	/**
+	 * @param providerId
+	 *            the providerId to set
+	 */
+	public void setProviderId(Long providerId) {
+		this.providerId = providerId;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the phone
+	 */
+	public String getPhone() {
+		return phone;
+	}
+
+	/**
+	 * @param phone
+	 *            the phone to set
+	 */
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param email
+	 *            the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/**
+	 * @return the regionId
+	 */
+	public Long getRegionId() {
+		return regionId;
+	}
+
+	/**
+	 * @param regionId
+	 *            the regionId to set
+	 */
+	public void setRegionId(Long regionId) {
+		this.regionId = regionId;
+	}
+
+	/**
+	 * @return the addressId
+	 */
+	public Long getAddressId() {
+		return addressId;
+	}
+
+	/**
+	 * @param addressId
+	 *            the addressId to set
+	 */
+	public void setAddressId(Long addressId) {
+		this.addressId = addressId;
+	}
+
+	public Provider() {
+
+	}
+
+	@Override
+	public String toString() {
+		return "Provider [providerId=" + providerId + ", name=" + name
+				+ ", phone=" + phone + ", email=" + email + ", regionId="
+				+ regionId + ", addressId=" + addressId + "]";
+	}
 
 }

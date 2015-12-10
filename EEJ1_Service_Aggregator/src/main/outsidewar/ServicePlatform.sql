@@ -28,6 +28,13 @@ IF ObJECt_ID('[SERVICE_TYPE]') IS NOT NULL DROP TABLE [SERVICE_TYPE];
 
 /* Create Tables */
 
+CREATE TABLE hibernate_sequences
+(
+	[sequence_name] [varchar](255) NOT NULL,
+	[next_val] [bigint] NULL
+	
+);
+
 CREATE TABLE [ACL_ENTRY]
 (
 	[ACL_ENTRY_ID] bigint NOT NULL,
