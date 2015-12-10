@@ -13,22 +13,23 @@ import org.hibernate.annotations.GenericGenerator;
 public class Provider {
 
 	@Id
-  @GeneratedValue(generator = "increment")
+	@GeneratedValue(generator="increment")
+	@GenericGenerator(name="increment", strategy = "increment") 
 	@Column(name = "PROVIDER_ID")
 	private Long providerId;
 
 	@Column(name = "NAME")
 	private String name;
-	
+
 	@Column(name = "PHONE")
 	private String phone;
-	
+
 	@Column(name = "EMAIL")
 	private String email;
-	
+
 	@Column(name = "REGION_ID")
 	private Long regionId;
-	
+
 	@Column(name = "ADDRESS_ID")
 	private Long addressId;
 

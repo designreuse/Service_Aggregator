@@ -6,29 +6,32 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity
 @Table(name = "ADDRESS")
 public class Address {
 	@Id
-  @GeneratedValue(generator = "increment")
+	@GeneratedValue(generator="increment")
+	@GenericGenerator(name="increment", strategy = "increment") 
 	@Column(name = "ADDRESS_ID")
 	private Long addressId;
 
 	@Column(name = "LINE1")
 	private String line1;
-	
+
 	@Column(name = "LINE2")
 	private String line2;
-	
+
 	@Column(name = "CITY")
 	private String city;
-	
+
 	@Column(name = "STATE")
 	private String state;
 
 	@Column(name = "COUNTRY")
 	private String country;
-	
+
 	@Column(name = "ZIP_CODE")
 	private String zipCode;
 
