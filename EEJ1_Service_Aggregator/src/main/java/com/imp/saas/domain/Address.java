@@ -3,15 +3,17 @@ package com.imp.saas.domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "ADDRESS")
 public class Address {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(generator = "increment")
+  @GenericGenerator(name = "increment", strategy = "increment")
 	@Column(name = "ADDRESS_ID")
 	private Long addressId;
 
