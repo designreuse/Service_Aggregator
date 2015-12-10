@@ -7,18 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-
 @Entity
 @Table(name = "REGION")
-@GenericGenerator(name = "Region", strategy = "org.hibernate.id.enhanced.TableGenerator", parameters = {
-		@Parameter(name = "segment_value", value = "REGION"),
-		@Parameter(name = "increment_size", value = "10"),
-		@Parameter(name = "optimizer", value = "pooled") })
 public class Region {
 	@Id
-	@GeneratedValue(generator = "Region", strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "REGION_ID")
 	private Long regionId;
 	
