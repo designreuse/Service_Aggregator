@@ -14,7 +14,6 @@ public class Provider {
 
 	@Id
   @GeneratedValue(generator = "increment")
-  @GenericGenerator(name = "increment", strategy = "increment")
 	@Column(name = "PROVIDER_ID")
 	private Long providerId;
 
