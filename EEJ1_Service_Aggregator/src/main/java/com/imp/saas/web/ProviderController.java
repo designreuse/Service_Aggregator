@@ -23,6 +23,7 @@ import com.imp.saas.domain.Region;
 import com.imp.saas.repository.AddressRepository;
 import com.imp.saas.repository.ProviderRepository;
 import com.imp.saas.repository.RegionRepository;
+import com.imp.saas.util.JsonDataConstants;
 
 /**
  * Controller for CRUD operations it maps tenantid from the URL to identify the
@@ -32,76 +33,86 @@ import com.imp.saas.repository.RegionRepository;
  */
 @Controller
 @RequestMapping("/{tenantid}")
-public class ProviderController {
+public class ProviderController
+{
 
-	@Autowired
-	private ProviderRepository providerRepository;
 
-	@Autowired
-	private AddressRepository addressRepository;
+  @Autowired
+  private ProviderRepository providerRepository;
 
-	@Autowired
-	private RegionRepository regionRepository;
+  @Autowired
+  private AddressRepository addressRepository;
 
-	// @Autowired
-	// private Address address;
+  @Autowired
+  private RegionRepository regionRepository;
 
-	// @Autowired
-	// private Region region;
+  private static final Logger LOGGER = Logger.getLogger(ProviderController.class);
 
-	private static final Logger LOGGER = Logger
-			.getLogger(ProviderController.class);
+  /**
+   * Method get json object of provider data and add provider details to DB
+   * @param inputJson
+   * @param tenantid
+   * @param model
+   * @return
+   */
+  @RequestMapping(value = "/addProvider", method = {RequestMethod.GET, RequestMethod.POST})
+  @Transactional
+  @ResponseBody
+  @Consumes(MediaType.APPLICATION_JSON)
+  public String addProvider(@RequestBody
+  String inputJson, @PathVariable
+  String tenantid, Model model)
+  {
+    try
+    {
+      model.addAttribute("tenantid", tenantid);
 
-	@RequestMapping(value = "/addProvider", method = { RequestMethod.GET,
-			RequestMethod.POST })
-	@Transactional
-	@ResponseBody
-	@Consumes(MediaType.APPLICATION_JSON)
-	public String addProvider(@RequestBody String inputJson,
-			@PathVariable String tenantid, Model model) {
-		try {
-			model.addAttribute("tenantid", tenantid);
+      JSONObject jsonObject = new JSONObject(inputJson);
 
-			JSONObject jsonObject = new JSONObject(inputJson);
+      Address address = new Address();
+      address.setCity(jsonObject.getString(JsonDataConstants.CITY));
+      address.setCountry(jsonObject.getString(JsonDataConstants.COUNTRY));
+      address.setLine1(jsonObject.getString(JsonDataConstants.LINE1));
+      address.setLine2(jsonObject.getString(JsonDataConstants.LINE2));
+      address.setState(jsonObject.getString(JsonDataConstants.STATE));
+      address.setZipCode(jsonObject.getString(JsonDataConstants.ZIP_CODE));
 
-			Address address = new Address();
-			address.setCity(jsonObject.getString("city"));
-			address.setCountry(jsonObject.getString("country"));
-			address.setLine1(jsonObject.getString("line1"));
-			address.setLine2(jsonObject.getString("line2"));
-			address.setState(jsonObject.getString("state"));
-			address.setZipCode(jsonObject.getString("zipCode"));
+      address = addressRepository.save(address);
 
-			address = addressRepository.save(address);
+      Long regionId = new Long(1);
+      Iterable<Region> regionList = regionRepository.findAll();
+      for (Iterator<Region> iterator = regionList.iterator(); iterator.hasNext();)
+      {
+        Region region = iterator.next();
+        if (jsonObject.getLong(JsonDataConstants.ZIP_CODE) > region.getStartZipCode()
+          && jsonObject.getLong(JsonDataConstants.ZIP_CODE) < region.getEndZipCode())
+        {
+          regionId = region.getRegionId();
+          break;
+        }
+      }
 
-			Long regionId = new Long(1);
-			Iterable<Region> regionList = regionRepository.findAll();
-			for (Iterator iterator = regionList.iterator(); iterator.hasNext();) {
-				Region region = (Region) iterator.next();
-				if (jsonObject.getLong("zipCode") > region.getStartZipCode()
-						&& jsonObject.getLong("zipCode") < region
-								.getEndZipCode()) {
-					regionId = region.getRegionId();
-					break;
-				}
-			}
+      //provider bean creation
+      Provider provider = new Provider();
+      provider.setAddressId(address.getAddressId());
+      provider.setEmail(jsonObject.getString(JsonDataConstants.EMAIL));
+      provider.setName(jsonObject.getString(JsonDataConstants.NAME));
+      provider.setPhone(jsonObject.getString(JsonDataConstants.PHONE));
+      provider.setRegionId(regionId);
 
-			Provider provider = new Provider();
-			provider.setAddressId(address.getAddressId());
-			provider.setEmail(jsonObject.getString("email"));
-			provider.setName(jsonObject.getString("name"));
-			provider.setPhone(jsonObject.getString("phone"));
-			provider.setRegionId(regionId);
+      //Save Provide details
+      provider = providerRepository.save(provider);
 
-			provider = providerRepository.save(provider);
+      LOGGER.info("provider Id :" + provider.getProviderId());
 
-			LOGGER.info("provider Id :" + provider.getProviderId());
+    }
+    catch (Exception e)
+    {
+      LOGGER.error(JsonDataConstants.PROVIDER_NOT_INSERTED + e.getMessage());
+      return "redirect:/databaseException";
+    }
+    LOGGER.debug(JsonDataConstants.PROVIDER_SUCCESSFULLY_ADDED);
 
-		} catch (Exception e) {
-			LOGGER.error("Provider not inserted in database :" + e.getMessage());
-		}
-		LOGGER.debug("Provider successfully added in the database");
-
-		return "Provider successfully added in the database";
-	}
+    return JsonDataConstants.PROVIDER_SUCCESSFULLY_ADDED;
+  }
 }
