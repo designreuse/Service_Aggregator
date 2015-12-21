@@ -56,7 +56,7 @@ public class MultitenancyProperties {
 
 	@PostConstruct
 	public void setDatasourceMap() throws ConfigExceptions {
-		datasourceMap = new HashMap<>();
+		datasourceMap = new HashMap<String, DataSourceProperties>();
 
 		DBResponse[] tenantMetadatList = getTenantDatabaseMetadatDetails();
 		for (DBResponse dbResponse : tenantMetadatList) {

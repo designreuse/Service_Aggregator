@@ -67,7 +67,7 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl extends
 
 		Map<String, DataSourceProperties> datasourceMap = multitenancyProperties
 				.getDatasourceMap();
-		map = new HashMap<>();
+		map = new HashMap<String, DataSource>();
 		for (String key : datasourceMap.keySet()) {
 			map.put(key, DataSourceCreater
 					.getDataSourceFromDataSourceProperties(datasourceMap
