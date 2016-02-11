@@ -64,6 +64,7 @@ public class MultiTenancyJpaConfiguration
     hibernateProps.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProvider);
     hibernateProps.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER,
       currentTenantIdentifierResolver);
+    hibernateProps.put(Environment.POOL_SIZE, 10);
     hibernateProps.put(Environment.DIALECT, dialect);
 
     return builder
